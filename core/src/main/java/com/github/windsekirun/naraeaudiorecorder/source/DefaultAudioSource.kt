@@ -35,6 +35,8 @@ open class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig =
         )
     }
 
+    private var _recordAvailable: Boolean = false
+
     /**
      * see [AudioSource.getAudioRecord]
      */
@@ -49,6 +51,16 @@ open class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig =
      * see [AudioSource.getBufferSize]
      */
     override fun getBufferSize(): Int = _bufferSize
+
+    /**
+     * see [AudioSource.isRecordAvailable]
+     */
+    override fun isRecordAvailable(): Boolean  = _recordAvailable
+
+    /**
+     * see [AudioSource.setRecordAvailable]
+     */
+    override fun setRecordAvailable(available: Boolean): AudioSource = this.apply { _recordAvailable = available }
 
     /**
      * Pre-process [AudioRecord] for start to recording.

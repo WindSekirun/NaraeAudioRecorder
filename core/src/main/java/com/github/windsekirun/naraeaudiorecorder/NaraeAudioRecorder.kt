@@ -1,13 +1,10 @@
 package com.github.windsekirun.naraeaudiorecorder
 
 /**
- * NaraeAudioRecorder
- * Class: NaraeAudioRecorder
- * Created by Pyxis on 1/5/19.
- *
- * Description:
+ * Main-stream class for manage Record feature
  */
+class NaraeAudioRecorder {
 
-object NaraeAudioRecorder {
+
 
 }

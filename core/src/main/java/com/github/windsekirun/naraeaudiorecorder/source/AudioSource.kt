@@ -21,4 +21,14 @@ interface AudioSource {
      * Buffer size to chunk raw data from [AudioRecord]
      */
     fun getBufferSize(): Int
+
+    /**
+     * get Flag when record is available
+     */
+    fun isRecordAvailable(): Boolean
+
+    /**
+     * set Flag which record is available
+     */
+    fun setRecordAvailable(available: Boolean): AudioSource
 }
