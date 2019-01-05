@@ -73,6 +73,8 @@ open class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig =
             } else {
                 startRecording()
             }
+
+            this@DefaultAudioSource.setRecordAvailable(true)
         }
     }
 }

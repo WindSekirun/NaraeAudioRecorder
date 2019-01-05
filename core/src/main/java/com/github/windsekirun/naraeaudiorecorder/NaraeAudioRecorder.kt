@@ -5,6 +5,4 @@ package com.github.windsekirun.naraeaudiorecorder
  */
 class NaraeAudioRecorder {
 
-
-
 }

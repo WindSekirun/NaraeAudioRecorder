@@ -1,13 +1,8 @@
 package com.github.windsekirun.naraeaudiorecorder.chunk
 
 /**
- * NaraeAudioRecorder
- * Class: AudioChunk
- * Created by Pyxis on 1/5/19.
- *
- * Description:
+ * Chunk file which contains raw data which came from [android.media.AudioRecord]
  */
-
 interface AudioChunk {
     /**
      * get Max value of Amplitude of this [AudioChunk]
