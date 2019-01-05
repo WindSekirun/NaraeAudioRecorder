@@ -1,21 +1,21 @@
 package com.github.windsekirun.naraeaudiorecorder.source
 
 import android.media.AudioRecord
+import android.media.MediaSyncEvent
 import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
 
 /**
  * Default settings of [AudioSource]
  *
- * @param audioRecordConfig [AudioRecordConfig] instance for configure [AudioRecord]
+ * @param audioRecordConfig optional, [AudioRecordConfig] instance for configure [AudioRecord]
  */
-class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig) : AudioSource {
+class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig = AudioRecordConfig.defaultConfig())
+    : AudioSource {
 
     /**
-     * backing property name for [getMinimumBufferSize]
-     * Surprisingly, these naming guidelines are mentioned in the official document.
-     * https://kotlinlang.org/docs/reference/coding-conventions.html#property-names
+     * backing property name for [getBufferSize]
      */
-    private val _minimumBufferSize: Int by lazy {
+    private val _bufferSize: Int by lazy {
         AudioRecord.getMinBufferSize(
             audioRecordConfig.frequency,
             audioRecordConfig.channel, audioRecordConfig.audioEncoding
@@ -31,13 +31,36 @@ class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig) : Aud
             audioRecordConfig.frequency,
             audioRecordConfig.channel,
             audioRecordConfig.audioEncoding,
-            getMinimumBufferSize()
+            getBufferSize()
         )
     }
 
+    /**
+     * see [AudioSource.getAudioRecord]
+     */
     override fun getAudioRecord(): AudioRecord = _audioRecord
 
+    /**
+     * see [AudioSource.getAudioConfig]
+     */
     override fun getAudioConfig(): AudioRecordConfig = audioRecordConfig
 
-    override fun getMinimumBufferSize(): Int = _minimumBufferSize
+    /**
+     * see [AudioSource.getBufferSize]
+     */
+    override fun getBufferSize(): Int = _bufferSize
+
+    /**
+     * Pre-process [AudioRecord] for start to recording.
+     */
+    @JvmOverloads
+    open fun preProcessAudioRecord(mediaSyncEvent: MediaSyncEvent? = null): AudioRecord {
+        return getAudioRecord().apply {
+            if (mediaSyncEvent != null) {
+                startRecording(mediaSyncEvent)
+            } else {
+                startRecording()
+            }
+        }
+    }
 }

@@ -9,9 +9,18 @@ import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
  * All of recording feature need to implement this methods.
  */
 interface AudioSource {
+    /**
+     * Instance of [AudioRecord] for recording audio
+     */
     fun getAudioRecord() : AudioRecord
 
+    /**
+     * Instance of [AudioRecordConfig]
+     */
     fun getAudioConfig() : AudioRecordConfig
 
-    fun getMinimumBufferSize(): Int
+    /**
+     * Buffer size to chunk ByteArray from [AudioRecord]
+     */
+    fun getBufferSize(): Int
 }
