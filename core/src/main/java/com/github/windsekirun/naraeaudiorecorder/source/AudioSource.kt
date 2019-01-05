@@ -5,8 +5,6 @@ import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
 
 /**
  * Source file which contains instance of [AudioRecord] and [AudioRecordConfig]
- *
- * All of recording feature need to implement this methods.
  */
 interface AudioSource {
     /**
@@ -20,7 +18,7 @@ interface AudioSource {
     fun getAudioConfig() : AudioRecordConfig
 
     /**
-     * Buffer size to chunk ByteArray from [AudioRecord]
+     * Buffer size to chunk raw data from [AudioRecord]
      */
     fun getBufferSize(): Int
 }
