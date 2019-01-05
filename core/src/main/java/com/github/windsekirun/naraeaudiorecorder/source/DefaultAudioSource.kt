@@ -9,7 +9,7 @@ import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
  *
  * @param audioRecordConfig optional, [AudioRecordConfig] instance for configure [AudioRecord]
  */
-open class DefaultAudioSource(private val audioRecordConfig: AudioRecordConfig = AudioRecordConfig.defaultConfig())
+open class DefaultAudioSource(var audioRecordConfig: AudioRecordConfig = AudioRecordConfig.defaultConfig())
     : AudioSource {
 
     /**

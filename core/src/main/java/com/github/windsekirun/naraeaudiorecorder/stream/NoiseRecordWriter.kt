@@ -53,6 +53,6 @@ class NoiseRecordWriter(audioSource: AudioSource = DefaultAudioSource()) : Defau
     /**
      * set [OnSilentDetectedListener] to get silent time
      */
-    fun setOnSilentDetectedListener(listener: OnSilentDetectedListener) =
+    fun setOnSilentDetectedListener(listener: OnSilentDetectedListener?) =
         this.apply { silentDetectedListener = listener }
 }

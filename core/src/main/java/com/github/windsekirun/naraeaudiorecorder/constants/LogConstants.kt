@@ -19,4 +19,7 @@ object LogConstants {
         "This device doesn't support AutomaticGainControl. Try again with DefaultAudioSource"
     const val EXCEPTION_INITIAL_FAILED_AUTOMATIC_GAIN_CONTROL =
         "Initialization process of AutomaticGainControl is failed."
+
+    const val EXCEPTION_DEST_FILE_NOT_ASSIGNED = "File isn't provided."
+    const val EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR = "All RecordFinder class need empty constructor to find AudioRecorder."
 }
