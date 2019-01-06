@@ -29,6 +29,10 @@ android {
     aaptOptions {
         ignoreAssetsPattern "!*ffprobe"
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {

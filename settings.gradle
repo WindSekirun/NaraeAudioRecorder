@@ -1,1 +1,1 @@
-include ':core', ':ffmpeg'
+include ':core', ':ffmpeg', ':sample'
