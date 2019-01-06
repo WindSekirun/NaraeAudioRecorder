@@ -21,6 +21,9 @@ class AudioRecorderConfig {
     var maxAvailableMillis: Long = -1L
     var refreshTimerMillis: Long = 50
 
+    /**
+     * check all necessary parameter is provided.
+     */
     fun check(): Boolean {
         if (destFile == null) {
             throw NullPointerException(LogConstants.EXCEPTION_DEST_FILE_NOT_ASSIGNED)

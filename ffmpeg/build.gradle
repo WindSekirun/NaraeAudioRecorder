@@ -1,17 +1,18 @@
 apply plugin: 'com.android.library'
-
-apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -24,11 +25,19 @@ android {
     packagingOptions {
         exclude 'META-INF/library_release.kotlin_module'
     }
+
+    aaptOptions {
+        ignoreAssetsPattern "!*ffprobe"
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.github.WindSekirun:RichUtilsKt:2.3.2'
-    api "io.reactivex.rxjava2:rxjava:2.2.5"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'nl.bravobit:android-ffmpeg:1.1.5'
+    implementation project(':core')
+}
+
+repositories {
+    mavenCentral()
 }

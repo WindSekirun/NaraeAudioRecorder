@@ -8,7 +8,7 @@ import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 /**
  * internal extensions for run [action] on Ui Thread
  */
-internal fun runOnUiThread(action: () -> Unit) = Handler(Looper.getMainLooper()).post(action)
+fun runOnUiThread(action: () -> Unit) = Handler(Looper.getMainLooper()).post(action)
 
 /**
  * internal extensions for ignore exception in [action]

@@ -8,8 +8,11 @@ import com.github.windsekirun.naraeaudiorecorder.source.AudioSource
  */
 class WavHeader(private val audioSource: AudioSource, private val length: Long) {
 
-    fun toBytes(): ByteArray {
-        val freqency = audioSource.getAudioConfig().frequency.toLong()
+    /**
+     * generate wav header using [audioSource], [length] and assign them to [ByteArray]
+     */
+    fun getWavFileHeaderByteArray(): ByteArray {
+        val frequency = audioSource.getAudioConfig().frequency.toLong()
         val channels = if (audioSource.getAudioConfig().channel == AudioFormat.CHANNEL_IN_MONO) 1 else 2
         val bitsPerSample = when (audioSource.getAudioConfig().audioEncoding) {
             AudioFormat.ENCODING_PCM_16BIT -> 16
@@ -17,8 +20,8 @@ class WavHeader(private val audioSource: AudioSource, private val length: Long) 
             else -> 16
         }.toByte()
 
-        return wavFileHeader(length - 44, length - 44 + 36, freqency,
-            channels, bitsPerSample.toLong() * freqency * channels.toLong() / 8, bitsPerSample
+        return wavFileHeader(length - 44, length - 44 + 36, frequency,
+            channels, bitsPerSample.toLong() * frequency * channels.toLong() / 8, bitsPerSample
         )
     }
 
@@ -60,7 +63,6 @@ class WavHeader(private val audioSource: AudioSource, private val length: Long) 
         header[30] = (byteRate shr 16 and 0xff).toByte()
         header[31] = (byteRate shr 24 and 0xff).toByte()
         header[32] = (channels * (bitsPerSample / 8)).toByte()
-        // block align
         header[33] = 0
         header[34] = bitsPerSample // bits per sample
         header[35] = 0

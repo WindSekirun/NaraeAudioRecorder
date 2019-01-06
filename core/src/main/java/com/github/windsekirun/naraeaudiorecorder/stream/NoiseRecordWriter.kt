@@ -1,6 +1,7 @@
 package com.github.windsekirun.naraeaudiorecorder.stream
 
 import android.media.AudioRecord
+import com.github.windsekirun.naraeaudiorecorder.chunk.AudioChunk
 import com.github.windsekirun.naraeaudiorecorder.chunk.ShortArrayAudioChunk
 import com.github.windsekirun.naraeaudiorecorder.constants.AudioConstants
 import com.github.windsekirun.naraeaudiorecorder.extensions.checkChunkAvailable
@@ -35,18 +36,8 @@ class NoiseRecordWriter(audioSource: AudioSource = DefaultAudioSource()) : Defau
                 firstSilenceMoment = 0
                 noiseRecordedAfterFirstSilenceThreshold++
             } else {
-                if (firstSilenceMoment == 0L) firstSilenceMoment = System.currentTimeMillis()
-                val silentTime = System.currentTimeMillis() - firstSilenceMoment
-                if (firstSilenceMoment != 0L && silentTime > AudioConstants.SILENCE_THRESHOLD) {
-                    if (silentTime > 1000L && noiseRecordedAfterFirstSilenceThreshold >= 3) {
-                        noiseRecordedAfterFirstSilenceThreshold = 0
-                        runOnUiThread { silentDetectedListener?.onSilence(silentTime) }
-                    }
-                } else {
-                    outputStream.write(audioChunk.toByteArray())
-                }
+                processSlientTime(audioChunk, outputStream)
             }
-
         }
     }
 
@@ -55,4 +46,17 @@ class NoiseRecordWriter(audioSource: AudioSource = DefaultAudioSource()) : Defau
      */
     fun setOnSilentDetectedListener(listener: OnSilentDetectedListener?) =
         this.apply { silentDetectedListener = listener }
+
+    private fun processSlientTime(audioChunk: AudioChunk, outputStream: OutputStream) {
+        if (firstSilenceMoment == 0L) firstSilenceMoment = System.currentTimeMillis()
+        val silentTime = System.currentTimeMillis() - firstSilenceMoment
+        if (firstSilenceMoment != 0L && silentTime > AudioConstants.SILENCE_THRESHOLD) {
+            if (silentTime > 1000L && noiseRecordedAfterFirstSilenceThreshold >= 3) {
+                noiseRecordedAfterFirstSilenceThreshold = 0
+                runOnUiThread { silentDetectedListener?.onSilence(silentTime) }
+            }
+        } else {
+            outputStream.write(audioChunk.toByteArray())
+        }
+    }
 }

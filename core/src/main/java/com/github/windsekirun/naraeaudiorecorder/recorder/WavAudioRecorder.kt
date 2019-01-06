@@ -10,7 +10,7 @@ import java.io.RandomAccessFile
 /**
  * [AudioRecorder] for record audio and save in wav file
  */
-class WavAudioRecorder(file: File, recordWriter: RecordWriter) : DefaultAudioRecorder(file, recordWriter) {
+open class WavAudioRecorder(file: File, recordWriter: RecordWriter) : DefaultAudioRecorder(file, recordWriter) {
     override fun stopRecording() {
         super.stopRecording()
         writeWavHeader()
@@ -21,7 +21,7 @@ class WavAudioRecorder(file: File, recordWriter: RecordWriter) : DefaultAudioRec
         val wavFile = randomAccessFile(file)
         wavFile?.let {
             it.seek(0)
-            it.write(WavHeader(recordWriter.getAudioSource(), file.length()).toBytes())
+            it.write(WavHeader(recordWriter.getAudioSource(), file.length()).getWavFileHeaderByteArray())
             it.close()
         }
     }

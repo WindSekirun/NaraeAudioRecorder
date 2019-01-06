@@ -3,14 +3,12 @@ package com.github.windsekirun.naraeaudiorecorder.listener
 import com.github.windsekirun.naraeaudiorecorder.model.RecordState
 
 /**
- * NaraeAudioRecorder
- * Class: OnRecordStateChangeListener
- * Created by Pyxis on 1/5/19.
- *
- * Description:
+ * Listener for handling state changes
  */
-
 interface OnRecordStateChangeListener {
 
+    /**
+     * Call when [RecordState] is changed
+     */
     fun onState(state: RecordState)
 }
