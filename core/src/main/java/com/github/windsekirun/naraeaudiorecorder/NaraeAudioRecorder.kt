@@ -17,9 +17,9 @@ import com.github.windsekirun.naraeaudiorecorder.recorder.finder.DefaultRecordFi
 import com.github.windsekirun.naraeaudiorecorder.recorder.finder.RecordFinder
 import com.github.windsekirun.naraeaudiorecorder.source.DefaultAudioSource
 import com.github.windsekirun.naraeaudiorecorder.source.NoiseAudioSource
-import com.github.windsekirun.naraeaudiorecorder.stream.DefaultRecordWriter
-import com.github.windsekirun.naraeaudiorecorder.stream.NoiseRecordWriter
-import com.github.windsekirun.naraeaudiorecorder.stream.RecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.DefaultRecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.NoiseRecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import pyxis.uzuki.live.richutilskt.utils.RPermission
@@ -138,6 +138,17 @@ class NaraeAudioRecorder {
     }
 
     /**
+     * Kotlin-compatible version of [setOnRecordStateChangeListener]
+     */
+    fun setOnRecordStateChangeListener(callback: (RecordState) -> Unit) {
+        this.recordStateChangeListener = object : OnRecordStateChangeListener {
+            override fun onState(state: RecordState) {
+                callback.invoke(state)
+            }
+        }
+    }
+
+    /**
      * get [RecordMetadata] which contains file and duration
      */
     fun getRecordMetadata(): RecordMetadata? {
@@ -150,8 +161,8 @@ class NaraeAudioRecorder {
 
     private fun requestPermission(context: Context, action: (Boolean) -> Unit) {
         val permission = listOf(Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
         RPermission.instance.checkPermission(context, permission) { code, _ ->
             action(code == RPermission.PERMISSION_GRANTED)
         }
@@ -160,7 +171,7 @@ class NaraeAudioRecorder {
     private fun findAudioRecorder(recordFinder: Class<*>) {
         try {
             val finder = recordFinder.getConstructor().newInstance() as? RecordFinder
-                ?: throw IllegalArgumentException(LogConstants.EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR)
+                    ?: throw IllegalArgumentException(LogConstants.EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR)
 
             val file = recorderConfig.destFile ?: return // it can't be null
             audioRecorder = finder.find(file.extension, file, recordWriter)
@@ -189,18 +200,18 @@ class NaraeAudioRecorder {
 
     private fun startTimer() {
         timerDisposable = Observable.interval(recorderConfig.refreshTimerMillis, TimeUnit.MILLISECONDS)
-            .subscribe { data, _, _ ->
+                .subscribe { data, _, _ ->
 
-                if (data == null) return@subscribe
-                if (recordWriter.getAudioSource().isRecordAvailable()) {
-                    currentTimer += recorderConfig.refreshTimerMillis
-                    recorderConfig.timerCountListener?.onTime(currentTimer, recorderConfig.maxAvailableMillis)
+                    if (data == null) return@subscribe
+                    if (recordWriter.getAudioSource().isRecordAvailable()) {
+                        currentTimer += recorderConfig.refreshTimerMillis
+                        recorderConfig.timerCountListener?.onTime(currentTimer, recorderConfig.maxAvailableMillis)
 
-                    if (recorderConfig.maxAvailableMillis != -1L && currentTimer >= recorderConfig.maxAvailableMillis) {
-                        stopRecording()
+                        if (recorderConfig.maxAvailableMillis != -1L && currentTimer >= recorderConfig.maxAvailableMillis) {
+                            stopRecording()
+                        }
                     }
                 }
-            }
     }
 
     private fun stopTimer() {
@@ -221,7 +232,7 @@ class NaraeAudioRecorder {
         }
 
         val duration =
-            metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
+                metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
 
         metaRetriever.release()
 

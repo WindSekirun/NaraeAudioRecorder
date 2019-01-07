@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="activity"
+            type="com.github.windsekirun.naraeaudiorecorder.sample.MainActivity"/>
+    </data>
+
+  <androidx.core.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+          <androidx.constraintlayout.widget.Guideline
+              android:id="@+id/guideline"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              app:layout_constraintGuide_percent="0.5" />
+
+          <TextView
+              android:id="@+id/textView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="24dp"
+              android:text="NaraeAudioRecorder"
+              android:textColor="@android:color/black"
+              android:textSize="24sp"
+              android:textStyle="bold"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.5"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+              android:id="@+id/textView2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="24dp"
+              android:text="AudioSource"
+              android:textSize="16sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.5"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+          <RadioGroup
+              android:id="@+id/radioGroup"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              app:checkedPosition="@={activity.sourceCheckedPosition}"
+              android:orientation="horizontal"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.5"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="40dp"
+                  android:text="Normal" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Noise" />
+          </RadioGroup>
+
+          <TextView
+              android:id="@+id/textView3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              android:text="AudioRecorder"
+              android:textSize="16sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.5"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+          <RadioGroup
+              android:id="@+id/radioGroup2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              android:orientation="vertical"
+              app:checkedPosition="@={activity.recorderCheckedPosition}"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.5"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="PCM" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="WAV" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="MP3" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="AAC" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="M4A" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="WMA" />
+
+              <RadioButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="FLAC" />
+
+
+          </RadioGroup>
+
+          <Button
+              android:id="@+id/button"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:layout_marginEnd="8dp"
+              android:text="Start"
+              android:onClick="@{activity::clickStart}"
+              app:layout_constraintEnd_toStartOf="@+id/guideline"
+              app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+
+          <Button
+              android:id="@+id/button2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="16dp"
+              android:text="Stop"
+              android:onClick="@{activity::clickStop}"
+              app:layout_constraintStart_toStartOf="@+id/guideline"
+              app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+
+          <Button
+              android:id="@+id/button3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              android:onClick="@{activity::clickResume}"
+              android:layout_marginEnd="8dp"
+              android:text="Resume"
+              app:layout_constraintEnd_toStartOf="@+id/guideline"
+              app:layout_constraintTop_toBottomOf="@+id/button" />
+
+          <Button
+              android:id="@+id/button4"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="8dp"
+              android:onClick="@{activity::clickPause}"
+              android:text="Pause"
+              app:layout_constraintStart_toStartOf="@+id/guideline"
+              app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+          <Button
+              android:id="@+id/button5"
+              android:layout_width="0dp"
+              android:onClick="@{activity::clickPlay}"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              android:text="Play"
+              app:layout_constraintEnd_toEndOf="@+id/button4"
+              app:layout_constraintStart_toStartOf="@+id/button3"
+              app:layout_constraintTop_toBottomOf="@+id/button3" />
+
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </androidx.core.widget.NestedScrollView>
+</layout>

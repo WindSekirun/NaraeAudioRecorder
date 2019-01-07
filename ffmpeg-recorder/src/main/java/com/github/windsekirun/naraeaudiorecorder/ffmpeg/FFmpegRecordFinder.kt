@@ -4,7 +4,7 @@ import com.github.windsekirun.naraeaudiorecorder.recorder.AudioRecorder
 import com.github.windsekirun.naraeaudiorecorder.recorder.PcmAudioRecorder
 import com.github.windsekirun.naraeaudiorecorder.recorder.WavAudioRecorder
 import com.github.windsekirun.naraeaudiorecorder.recorder.finder.RecordFinder
-import com.github.windsekirun.naraeaudiorecorder.stream.RecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import java.io.File
 
 /**

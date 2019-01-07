@@ -2,7 +2,7 @@ package com.github.windsekirun.naraeaudiorecorder.recorder
 
 import com.github.windsekirun.naraeaudiorecorder.extensions.ignoreException
 import com.github.windsekirun.naraeaudiorecorder.recorder.wav.WavHeader
-import com.github.windsekirun.naraeaudiorecorder.stream.RecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import java.io.File
 import java.io.IOException
 import java.io.RandomAccessFile

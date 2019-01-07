@@ -11,7 +11,7 @@ import com.github.windsekirun.naraeaudiorecorder.ffmpeg.model.FFmpegBitRate
 import com.github.windsekirun.naraeaudiorecorder.ffmpeg.model.FFmpegConvertState
 import com.github.windsekirun.naraeaudiorecorder.ffmpeg.model.FFmpegSamplingRate
 import com.github.windsekirun.naraeaudiorecorder.recorder.WavAudioRecorder
-import com.github.windsekirun.naraeaudiorecorder.stream.RecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler
 import nl.bravobit.ffmpeg.FFmpeg
 import java.io.File
@@ -21,21 +21,17 @@ import java.io.File
  */
 open class FFmpegAudioRecorder(file: File, recordWriter: RecordWriter) : WavAudioRecorder(file, recordWriter) {
     private lateinit var destFile: File
-    private var context: Context? by weak(null)
+    private var _context: Context? by weak(null)
     private var convertStateChangeListener: OnConvertStateChangeListener? = null
     private var convertConfig: FFmpegConvertConfig = FFmpegConvertConfig.defaultConfig()
 
     override fun startRecording() {
-        if (context == null) {
+        if (_context == null) {
             throw NullPointerException(LogConstants.EXCEPTION_CONTEXT_NOT_ASSIGNED)
         }
 
-        if (!FFmpeg.getInstance(context).isSupported) {
+        if (!FFmpeg.getInstance(_context).isSupported) {
             throw NullPointerException(LogConstants.EXCEPTION_FFMPEG_NOT_SUPPORTED)
-        }
-
-        if (!::destFile.isInitialized) {
-            throw NullPointerException(LogConstants.EXCEPTION_DEST_FILE_NOT_ASSIGNED)
         }
 
         super.startRecording()
@@ -47,11 +43,10 @@ open class FFmpegAudioRecorder(file: File, recordWriter: RecordWriter) : WavAudi
     }
 
     /**
-     * set [destFile], [context] to [FFmpegAudioRecorder]
+     * set [Context] to [FFmpegAudioRecorder]
      */
-    fun setDestFile(context: Context, destFile: File) {
-        this.context = context
-        this.destFile = destFile
+    fun setContext(context: Context) {
+        this._context = context
     }
 
     /**
@@ -59,6 +54,17 @@ open class FFmpegAudioRecorder(file: File, recordWriter: RecordWriter) : WavAudi
      */
     fun setOnConvertStateChangeListener(listener: OnConvertStateChangeListener) {
         this.convertStateChangeListener = listener
+    }
+
+    /**
+     * Kotlin-compatible version of [setOnConvertStateChangeListener]
+     */
+    fun setOnConvertStateChangeListener(callback: (FFmpegConvertState) -> Unit) {
+        this.convertStateChangeListener = object : OnConvertStateChangeListener {
+            override fun onState(state: FFmpegConvertState) {
+                callback.invoke(state)
+            }
+        }
     }
 
     /**
@@ -70,6 +76,8 @@ open class FFmpegAudioRecorder(file: File, recordWriter: RecordWriter) : WavAudi
 
     private fun convert() {
         val commandBuilder = mutableListOf<String>()
+        val destFile = File(file.absolutePath)
+        val tempFile = File(file.parent, "tmp-${file.name}")
 
         commandBuilder.addAll(listOf("-y", "-i", file.path))
 
@@ -85,12 +93,12 @@ open class FFmpegAudioRecorder(file: File, recordWriter: RecordWriter) : WavAudi
             commandBuilder.addAll(listOf("-ac", "1"))
         }
 
-        commandBuilder.add(destFile.path)
+        commandBuilder.add(tempFile.path)
 
         val cmd = commandBuilder.toTypedArray()
 
         try {
-            FFmpeg.getInstance(context).execute(cmd, object: ExecuteBinaryResponseHandler() {
+            FFmpeg.getInstance(_context).execute(cmd, object : ExecuteBinaryResponseHandler() {
                 override fun onStart() {
                     super.onStart()
                     runOnUiThread { convertStateChangeListener?.onState(FFmpegConvertState.START) }
@@ -98,6 +106,10 @@ open class FFmpegAudioRecorder(file: File, recordWriter: RecordWriter) : WavAudi
 
                 override fun onSuccess(message: String?) {
                     super.onSuccess(message)
+
+                    file.delete()
+                    tempFile.renameTo(destFile)
+
                     runOnUiThread { convertStateChangeListener?.onState(FFmpegConvertState.SUCCESS) }
                 }
 

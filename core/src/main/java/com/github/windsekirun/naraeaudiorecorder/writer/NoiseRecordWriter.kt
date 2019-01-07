@@ -1,4 +1,4 @@
-package com.github.windsekirun.naraeaudiorecorder.stream
+package com.github.windsekirun.naraeaudiorecorder.writer
 
 import android.media.AudioRecord
 import com.github.windsekirun.naraeaudiorecorder.chunk.AudioChunk

@@ -1,7 +1,7 @@
 package com.github.windsekirun.naraeaudiorecorder.recorder
 
-import com.github.windsekirun.naraeaudiorecorder.stream.DefaultRecordWriter
-import com.github.windsekirun.naraeaudiorecorder.stream.RecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.DefaultRecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

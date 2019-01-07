@@ -1,8 +1,6 @@
-package com.github.windsekirun.naraeaudiorecorder.stream
+package com.github.windsekirun.naraeaudiorecorder.writer
 
 import android.media.AudioRecord
-import android.os.Handler
-import android.os.Looper
 import com.github.windsekirun.naraeaudiorecorder.chunk.AudioChunk
 import com.github.windsekirun.naraeaudiorecorder.chunk.ByteArrayAudioChunk
 import com.github.windsekirun.naraeaudiorecorder.extensions.checkChunkAvailable

@@ -9,7 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/ffmpeg" />
+            <option value="$PROJECT_DIR$/ffmpeg-recorder" />
             <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>

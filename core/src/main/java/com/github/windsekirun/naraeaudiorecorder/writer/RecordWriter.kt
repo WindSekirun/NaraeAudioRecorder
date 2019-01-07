@@ -1,4 +1,4 @@
-package com.github.windsekirun.naraeaudiorecorder.stream
+package com.github.windsekirun.naraeaudiorecorder.writer
 
 import com.github.windsekirun.naraeaudiorecorder.source.AudioSource
 import java.io.OutputStream

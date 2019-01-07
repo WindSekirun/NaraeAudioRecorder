@@ -1,7 +1,7 @@
 package com.github.windsekirun.naraeaudiorecorder.recorder.finder
 
 import com.github.windsekirun.naraeaudiorecorder.recorder.AudioRecorder
-import com.github.windsekirun.naraeaudiorecorder.stream.RecordWriter
+import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import java.io.File
 
 /**
