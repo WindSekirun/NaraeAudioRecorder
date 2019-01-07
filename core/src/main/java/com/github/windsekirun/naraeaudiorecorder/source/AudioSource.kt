@@ -10,12 +10,12 @@ interface AudioSource {
     /**
      * Instance of [AudioRecord] for recording audio
      */
-    fun getAudioRecord() : AudioRecord
+    fun getAudioRecord(): AudioRecord
 
     /**
      * Instance of [AudioRecordConfig]
      */
-    fun getAudioConfig() : AudioRecordConfig
+    fun getAudioConfig(): AudioRecordConfig
 
     /**
      * Buffer size to chunk raw data from [AudioRecord]
@@ -31,4 +31,9 @@ interface AudioSource {
      * set Flag which record is available
      */
     fun setRecordAvailable(available: Boolean): AudioSource
+
+    /**
+     * Pre-process [AudioRecord] for start to recording.
+     */
+    fun preProcessAudioRecord(): AudioRecord
 }

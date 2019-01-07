@@ -6,6 +6,7 @@ import com.github.windsekirun.naraeaudiorecorder.chunk.ByteArrayAudioChunk
 import com.github.windsekirun.naraeaudiorecorder.extensions.checkChunkAvailable
 import com.github.windsekirun.naraeaudiorecorder.extensions.runOnUiThread
 import com.github.windsekirun.naraeaudiorecorder.listener.OnChunkAvailableListener
+import com.github.windsekirun.naraeaudiorecorder.model.DebugState
 import com.github.windsekirun.naraeaudiorecorder.source.AudioSource
 import com.github.windsekirun.naraeaudiorecorder.source.DefaultAudioSource
 import java.io.OutputStream
@@ -22,7 +23,8 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
      * see [RecordWriter.startRecording]
      */
     override fun startRecording(outputStream: OutputStream) {
-        write(getAudioSource().getAudioRecord(), getAudioSource().getBufferSize(), outputStream)
+        DebugState.debug("Reqeust accepted, startRecording()")
+        write(getAudioSource().preProcessAudioRecord(), getAudioSource().getBufferSize(), outputStream)
     }
 
     /**
@@ -43,6 +45,7 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
      */
     open fun write(audioRecord: AudioRecord, bufferSize: Int, outputStream: OutputStream) {
         val audioChunk = ByteArrayAudioChunk(ByteArray(bufferSize))
+        DebugState.debug("read and write... available: ${audioSource.isRecordAvailable()}")
         while (audioSource.isRecordAvailable()) {
             audioChunk.setReadCount(audioRecord.read(audioChunk.bytes, 0, bufferSize))
             if (!audioChunk.checkChunkAvailable()) continue

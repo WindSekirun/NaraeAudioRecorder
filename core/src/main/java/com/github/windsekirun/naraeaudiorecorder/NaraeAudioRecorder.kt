@@ -9,6 +9,7 @@ import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 import com.github.windsekirun.naraeaudiorecorder.extensions.safeDispose
 import com.github.windsekirun.naraeaudiorecorder.extensions.subscribe
 import com.github.windsekirun.naraeaudiorecorder.listener.OnRecordStateChangeListener
+import com.github.windsekirun.naraeaudiorecorder.model.DebugState
 import com.github.windsekirun.naraeaudiorecorder.model.RecordMetadata
 import com.github.windsekirun.naraeaudiorecorder.model.RecordState
 import com.github.windsekirun.naraeaudiorecorder.recorder.AudioRecorder
@@ -43,23 +44,14 @@ class NaraeAudioRecorder {
     /**
      * create and assign [NaraeAudioRecorder]
      */
-    fun create(context: Context, config: AudioRecorderConfig.() -> Unit) {
-        create(context, DefaultRecordFinder::class.java, config)
+    fun create(config: AudioRecorderConfig.() -> Unit) {
+        create(DefaultRecordFinder::class.java, config)
     }
 
     /**
      * create and assign [NaraeAudioRecorder]
      */
-    fun create(context: Context, recordFinder: Class<*>, config: AudioRecorderConfig.() -> Unit) {
-        requestPermission(context) {
-            permissionGranted = it
-
-            if (permissionGranted) {
-                Log.d(LogConstants.TAG, LogConstants.PERMISSION_GRANTED)
-            } else {
-                Log.d(LogConstants.TAG, LogConstants.PERMISSION_DENIED)
-            }
-        }
+    fun create(recordFinder: Class<*>, config: AudioRecorderConfig.() -> Unit) {
 
         val audioRecorderConfig = AudioRecorderConfig()
         audioRecorderConfig.config()
@@ -69,6 +61,23 @@ class NaraeAudioRecorder {
 
         findRecordWriter()
         findAudioRecorder(recordFinder)
+
+        DebugState.state = audioRecorderConfig.debugMode
+    }
+
+    /**
+     * check permission when using [NaraeAudioRecorder]
+     */
+    fun checkPermission(context: Context) {
+        requestPermission(context) {
+            permissionGranted = it
+
+            if (permissionGranted) {
+                Log.d(LogConstants.TAG, LogConstants.PERMISSION_GRANTED)
+            } else {
+                Log.d(LogConstants.TAG, LogConstants.PERMISSION_DENIED)
+            }
+        }
     }
 
     /**

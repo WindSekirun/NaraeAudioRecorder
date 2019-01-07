@@ -65,15 +65,9 @@ open class DefaultAudioSource(var audioRecordConfig: AudioRecordConfig = AudioRe
     /**
      * Pre-process [AudioRecord] for start to recording.
      */
-    @JvmOverloads
-    open fun preProcessAudioRecord(mediaSyncEvent: MediaSyncEvent? = null): AudioRecord {
+    override fun preProcessAudioRecord(): AudioRecord {
         return getAudioRecord().apply {
-            if (mediaSyncEvent != null) {
-                startRecording(mediaSyncEvent)
-            } else {
-                startRecording()
-            }
-
+            startRecording()
             this@DefaultAudioSource.setRecordAvailable(true)
         }
     }

@@ -13,7 +13,7 @@ import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 class NoiseAudioSource(audioRecordConfig: AudioRecordConfig = AudioRecordConfig.defaultConfig())
     : DefaultAudioSource(audioRecordConfig) {
 
-    override fun preProcessAudioRecord(mediaSyncEvent: MediaSyncEvent?): AudioRecord {
+    override fun preProcessAudioRecord(): AudioRecord {
         if (!NoiseSuppressor.isAvailable()) {
             Log.e(LogConstants.TAG, LogConstants.EXCEPTION_NOT_SUPPORTED_NOISE_SUPPRESSOR)
             throw UnsupportedOperationException(LogConstants.EXCEPTION_NOT_SUPPORTED_NOISE_SUPPRESSOR)
@@ -26,6 +26,6 @@ class NoiseAudioSource(audioRecordConfig: AudioRecordConfig = AudioRecordConfig.
             Log.e(LogConstants.TAG, LogConstants.EXCEPTION_INITIAL_FAILED_NOISE_SUPPESSOR)
         }
 
-        return super.preProcessAudioRecord(mediaSyncEvent)
+        return super.preProcessAudioRecord()
     }
 }

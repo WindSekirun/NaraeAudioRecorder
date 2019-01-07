@@ -83,6 +83,11 @@ class AudioRecorderConfig {
     var timerCountCallback: ((Long, Long) -> Unit)? = null
 
     /**
+     * if this value is turn on, Debug log in library is printed in Logcat.
+     */
+    var debugMode: Boolean = false
+
+    /**
      * check all necessary parameter is provided.
      */
     fun check(): Boolean {

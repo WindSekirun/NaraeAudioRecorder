@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
             activity = this@MainActivity
         }
         setContentView(binding.root)
+
+        audioRecorder.checkPermission(this)
     }
 
     fun clickStart(view: View) {
@@ -65,12 +67,13 @@ class MainActivity : AppCompatActivity() {
             else -> DefaultAudioSource(AudioRecordConfig.defaultConfig())
         }
 
-        audioRecorder.create(this, FFmpegRecordFinder::class.java) {
+        audioRecorder.create(FFmpegRecordFinder::class.java) {
             this.destFile = destFile
             this.audioSource = audioSource
             this.chunkAvailableCallback = { chunkAvailable(it) }
             this.silentDetectedCallback = { silentDetected(it) }
             this.timerCountCallback = { current, max -> timerChanged(current, max) }
+            this.debugMode = true
         }
 
         if (ffmpegMode) {
@@ -83,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         audioRecorder.setOnRecordStateChangeListener { recordStateChanged(it) }
         audioRecorder.startRecording()
+        recordInitialized = true
     }
 
     fun clickStop(view: View) {
