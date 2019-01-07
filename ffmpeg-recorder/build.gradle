@@ -41,3 +41,32 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'NaraeAudioRecorder-FFmpeg-Recorder'
+    orgName = 'windsekirun'
+
+    publishedGroupId = 'com.github.windsekirun'
+    libraryName = 'NaraeAudioRecorder'
+    artifact = 'NaraeAudioRecorder-ffmpeg-recorder'
+
+    libraryDescription = 'AudioRecorder for Android powered by Kotlin'
+
+    siteUrl = 'https://github.com/WindSekirun/NaraeAudioRecorder'
+    gitUrl = 'https://github.com/WindSekirun/NaraeAudioRecorder.git'
+
+    libraryVersion = rootProject.ext.libraryVersion
+
+    developerId = 'WindSekirun'
+    developerName = 'WindSekirun'
+    developerEmail = 'pyxis@uzuki.live'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+apply from: rootProject.file('gradle/install-v1.gradle')
+apply from: rootProject.file('gradle/bintray-android-v1.gradle')
