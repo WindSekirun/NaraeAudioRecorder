@@ -42,4 +42,7 @@ dependencies {
     implementation 'com.github.WindSekirun:BindAdapters:0.2.1-androidx'
     implementation project(':core')
     implementation project(':ffmpeg-recorder')
+
+//    implementation 'com.github.WindSekirun.NaraeAudioRecorder:core:1.0.0'
+//    implementation 'com.github.WindSekirun.NaraeAudioRecorder:ffmpeg-recorder:1.0.0'
 }

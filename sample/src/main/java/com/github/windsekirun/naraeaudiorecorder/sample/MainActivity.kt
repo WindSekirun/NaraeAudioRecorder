@@ -29,6 +29,7 @@ import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     val sourceCheckedPosition = ObservableInt(0)
@@ -70,13 +71,16 @@ class MainActivity : AppCompatActivity() {
         if (destFile == null) return
         destFile?.parentFile?.mkdir()
 
+        val recordConfig = AudioRecordConfig.defaultConfig()
+
         val audioSource = when (sourceCheckedPosition.get()) {
-            1 -> NoiseAudioSource(AudioRecordConfig.defaultConfig())
-            else -> DefaultAudioSource(AudioRecordConfig.defaultConfig())
+            1 -> NoiseAudioSource(recordConfig)
+            else -> DefaultAudioSource(recordConfig)
         }
 
         audioRecorder.create(FFmpegRecordFinder::class.java) {
             this.destFile = this@MainActivity.destFile
+            this.recordConfig = recordConfig
             this.audioSource = audioSource
             this.chunkAvailableCallback = { chunkAvailable(it) }
             this.silentDetectedCallback = { silentDetected(it) }
@@ -106,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         audioRecorder.stopRecording()
         if (!ffmpegMode) {
             recordMetadata = audioRecorder.retrieveMetadata(destFile ?: File(""))
-            alert("${destFile?.absolutePath} 에 저장되었습니다.")
+            alert("Saved on ${destFile?.absolutePath}")
         }
     }
 
@@ -168,7 +172,7 @@ class MainActivity : AppCompatActivity() {
     private fun ffmpegConvertStateChanged(convertState: FFmpegConvertState) {
         if (convertState == FFmpegConvertState.SUCCESS) {
             recordMetadata = audioRecorder.retrieveMetadata(destFile ?: File(""))
-            alert("${destFile?.absolutePath} 에 저장되었습니다.")
+            alert("Saved on ${destFile?.absolutePath}")
         }
 
         Log.d(TAG, "ffmpegConvertStateChanged: ${convertState.name}")
