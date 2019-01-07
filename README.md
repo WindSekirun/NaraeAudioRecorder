@@ -1,7 +1,6 @@
 # NaraeAudioRecorder
 
-[ ![Download](https://api.bintray.com/packages/windsekirun/maven/NaraeAudioRecorder-Core/images/download.svg) ](https://bintray.com/windsekirun/maven/NaraeAudioRecorder-Core/_latestVersion) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5704b97bf83346cbb909b336069954c2)](https://www.codacy.com/app/pyxis/NaraeAudioRecorder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WindSekirun/NaraeAudioRecorder&amp;utm_campaign=Badge_Grade) 
-
+[ ![Download](https://api.bintray.com/packages/windsekirun/maven/NaraeAudioRecorder-Core/images/download.svg) ](https://bintray.com/windsekirun/maven/NaraeAudioRecorder-Core/_latestVersion) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5704b97bf83346cbb909b336069954c2)](https://www.codacy.com/app/pyxis/NaraeAudioRecorder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WindSekirun/NaraeAudioRecorder&amp;utm_campaign=Badge_Grade) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-NaraeAudioRecorder-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7436)
 AudioRecorder for Android powered by Kotlin
 
 ## Key Features
