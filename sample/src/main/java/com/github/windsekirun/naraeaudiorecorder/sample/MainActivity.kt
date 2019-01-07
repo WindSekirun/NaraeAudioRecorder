@@ -1,12 +1,17 @@
 package com.github.windsekirun.naraeaudiorecorder.sample
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.databinding.ObservableInt
 import com.github.windsekirun.naraeaudiorecorder.NaraeAudioRecorder
 import com.github.windsekirun.naraeaudiorecorder.chunk.AudioChunk
@@ -19,6 +24,7 @@ import com.github.windsekirun.naraeaudiorecorder.model.RecordState
 import com.github.windsekirun.naraeaudiorecorder.sample.databinding.MainActivityBinding
 import com.github.windsekirun.naraeaudiorecorder.source.DefaultAudioSource
 import com.github.windsekirun.naraeaudiorecorder.source.NoiseAudioSource
+import pyxis.uzuki.live.richutilskt.utils.alert
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 import pyxis.uzuki.live.richutilskt.utils.toast
@@ -30,8 +36,9 @@ class MainActivity : AppCompatActivity() {
 
     private var recordInitialized: Boolean = false
     private var recordMetadata: RecordMetadata? = null
+    private var destFile: File? = null
+    private var ffmpegMode: Boolean = false
 
-    private val mediaPlayer = MediaPlayer()
     private val audioRecorder = NaraeAudioRecorder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,10 +64,11 @@ class MainActivity : AppCompatActivity() {
         }
         if (extensions.isEmpty()) return
 
-        val ffmpegMode = recorderCheckedPosition.get() >= 2
+        ffmpegMode = recorderCheckedPosition.get() >= 2
         val fileName = System.currentTimeMillis().asDateString()
-        val destFile = File(getExternalFilesDir(null), "/$fileName$extensions")
-        destFile.parentFile.mkdir()
+        destFile = File(Environment.getExternalStorageDirectory(), "/NaraeAudioRecorder/$fileName$extensions")
+        if (destFile == null) return
+        destFile?.parentFile?.mkdir()
 
         val audioSource = when (sourceCheckedPosition.get()) {
             1 -> NoiseAudioSource(AudioRecordConfig.defaultConfig())
@@ -68,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         audioRecorder.create(FFmpegRecordFinder::class.java) {
-            this.destFile = destFile
+            this.destFile = this@MainActivity.destFile
             this.audioSource = audioSource
             this.chunkAvailableCallback = { chunkAvailable(it) }
             this.silentDetectedCallback = { silentDetected(it) }
@@ -96,7 +104,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         audioRecorder.stopRecording()
-        recordMetadata = audioRecorder.getRecordMetadata()
+        if (!ffmpegMode) {
+            recordMetadata = audioRecorder.retrieveMetadata(destFile ?: File(""))
+            alert("${destFile?.absolutePath} 에 저장되었습니다.")
+        }
     }
 
     fun clickResume(view: View) {
@@ -118,13 +129,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun clickPlay(view: View) {
-        recordMetadata?.let {
-            mediaPlayer.apply {
-                setDataSource(this@MainActivity, Uri.fromFile(it.file))
-                prepare()
-                start()
-            }
+        if (!recordInitialized) {
+            toast("Press Start button first")
+            return
         }
+
+        val uri = if (Build.VERSION.SDK_INT >= 24) {
+            val authority = "$packageName.fileprovider"
+            FileProvider.getUriForFile(this, authority, destFile ?: File(""))
+        } else {
+            Uri.fromFile(destFile)
+        }
+
+        val intent = Intent(Intent.ACTION_VIEW)
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(destFile?.extension)
+        intent.apply {
+            setDataAndType(uri, mimeType)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        val chooser = Intent.createChooser(intent, "Open with...")
+        startActivity(chooser)
     }
 
     private fun chunkAvailable(audioChunk: AudioChunk) {
@@ -140,6 +166,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ffmpegConvertStateChanged(convertState: FFmpegConvertState) {
+        if (convertState == FFmpegConvertState.SUCCESS) {
+            recordMetadata = audioRecorder.retrieveMetadata(destFile ?: File(""))
+            alert("${destFile?.absolutePath} 에 저장되었습니다.")
+        }
+
         Log.d(TAG, "ffmpegConvertStateChanged: ${convertState.name}")
 
         runOnUiThread { toast("FFmpegConvertState: ${convertState.name}") }

@@ -23,6 +23,7 @@ import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import pyxis.uzuki.live.richutilskt.utils.RPermission
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 
@@ -111,7 +112,9 @@ class NaraeAudioRecorder {
         recordStateChangeListener?.onState(RecordState.STOP)
 
         stopTimer()
-        retrieveMetadata()
+        if (recorderConfig.destFile != null) {
+            retrieveFileMetadata(recorderConfig.destFile ?: File(""))
+        }
     }
 
     /**
@@ -165,6 +168,13 @@ class NaraeAudioRecorder {
         }
 
         return recordMetadata
+    }
+
+    /**
+     * retrieve Metadata with given [file]
+     */
+    fun retrieveMetadata(file: File): RecordMetadata {
+        return retrieveFileMetadata(file)
     }
 
     private fun requestPermission(context: Context, action: (Boolean) -> Unit) {
@@ -226,12 +236,10 @@ class NaraeAudioRecorder {
         timerDisposable.safeDispose()
     }
 
-    private fun retrieveMetadata() {
-        val file = recorderConfig.destFile ?: return
-
+    private fun retrieveFileMetadata(file: File): RecordMetadata {
         if (audioRecorder !is WavAudioRecorder) {
             recordMetadata = RecordMetadata(file, 0)
-            return
+            return recordMetadata
         }
 
         val metaRetriever = MediaMetadataRetriever()
@@ -245,5 +253,6 @@ class NaraeAudioRecorder {
         metaRetriever.release()
 
         recordMetadata = RecordMetadata(file, duration)
+        return recordMetadata
     }
 }
