@@ -20,10 +20,10 @@ object DebugState {
     /**
      * Display error log
      */
-    fun error(message: String, exception: Exception? = null) {
+    fun error(message: String, throwable: Throwable? = null) {
         if (!state) return
-        if (exception != null) {
-            Log.e(LogConstants.TAG, message, exception);
+        if (throwable != null) {
+            Log.e(LogConstants.TAG, message, throwable)
         } else {
             Log.e(LogConstants.TAG, message)
         }

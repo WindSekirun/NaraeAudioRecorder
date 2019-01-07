@@ -11,8 +11,8 @@ import java.util.concurrent.Executors
  * Default settings of [AudioRecorder]
  */
 open class DefaultAudioRecorder(
-    protected val file: File,
-    protected val recordWriter: RecordWriter = DefaultRecordWriter()
+        protected val file: File,
+        protected val recordWriter: RecordWriter = DefaultRecordWriter()
 ) : AudioRecorder {
     private val executorService = Executors.newSingleThreadExecutor()
     private val outputStream by lazy { FileOutputStream(file) }

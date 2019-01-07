@@ -3,7 +3,6 @@ package com.github.windsekirun.naraeaudiorecorder
 import android.Manifest
 import android.content.Context
 import android.media.MediaMetadataRetriever
-import android.util.Log
 import com.github.windsekirun.naraeaudiorecorder.config.AudioRecorderConfig
 import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 import com.github.windsekirun.naraeaudiorecorder.extensions.safeDispose
@@ -73,9 +72,9 @@ class NaraeAudioRecorder {
             permissionGranted = it
 
             if (permissionGranted) {
-                Log.d(LogConstants.TAG, LogConstants.PERMISSION_GRANTED)
+                DebugState.debug(LogConstants.PERMISSION_GRANTED)
             } else {
-                Log.d(LogConstants.TAG, LogConstants.PERMISSION_DENIED)
+                DebugState.debug(LogConstants.PERMISSION_DENIED)
             }
         }
     }
@@ -90,7 +89,7 @@ class NaraeAudioRecorder {
      */
     fun startRecording() {
         if (!permissionGranted) {
-            Log.d(LogConstants.TAG, LogConstants.PERMISSION_DENIED)
+            DebugState.debug(LogConstants.PERMISSION_DENIED)
             return
         }
 

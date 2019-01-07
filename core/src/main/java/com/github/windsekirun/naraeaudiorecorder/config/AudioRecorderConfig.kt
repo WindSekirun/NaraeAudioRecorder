@@ -26,7 +26,7 @@ class AudioRecorderConfig {
     /**
      * [AudioSource] to use for recording audio. default is [DefaultAudioSource]
      */
-    var audioSource : AudioSource = DefaultAudioSource(recordConfig)
+    var audioSource: AudioSource = DefaultAudioSource(recordConfig)
 
     /**
      * [OnChunkAvailableListener] called when [com.github.windsekirun.naraeaudiorecorder.chunk.AudioChunk] is available.
@@ -105,7 +105,7 @@ class AudioRecorderConfig {
         }
 
         if (silentDetectedListener == null && silentDetectedCallback != null) {
-            silentDetectedListener = object: OnSilentDetectedListener {
+            silentDetectedListener = object : OnSilentDetectedListener {
                 override fun onSilence(silenceTime: Long) {
                     silentDetectedCallback?.invoke(silenceTime)
                 }
@@ -113,9 +113,9 @@ class AudioRecorderConfig {
         }
 
         if (timerCountListener == null && timerCountCallback != null) {
-            timerCountListener = object: OnTimerCountListener {
+            timerCountListener = object : OnTimerCountListener {
                 override fun onTime(currentTime: Long, maxTime: Long) {
-                   timerCountCallback?.invoke(currentTime, maxTime)
+                    timerCountCallback?.invoke(currentTime, maxTime)
                 }
             }
         }

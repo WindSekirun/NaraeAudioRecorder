@@ -12,7 +12,7 @@ interface AudioChunk {
     /**
      * Convert [ByteArray] to [ShortArray] to calculate
      */
-    fun toByteArray() : ByteArray
+    fun toByteArray(): ByteArray
 
     /**
      * Convert [ShortArray] to [ByteArray] to calculate

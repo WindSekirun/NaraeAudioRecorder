@@ -21,8 +21,8 @@ data class AudioRecordConfig(val audioSource: Int, val audioEncoding: Int, val c
          */
         @JvmStatic
         fun defaultConfig() = AudioRecordConfig(MediaRecorder.AudioSource.MIC,
-            AudioFormat.ENCODING_PCM_16BIT,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioConstants.FREQUENCY_44100)
+                AudioFormat.ENCODING_PCM_16BIT,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioConstants.FREQUENCY_44100)
     }
 }

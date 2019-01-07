@@ -61,6 +61,6 @@ class ShortArrayAudioChunk(var shorts: ShortArray) : AudioChunk {
      * find first peak value of [shorts]
      */
     fun findFirstIndex(): Int =
-        shorts.indexOfFirst { it >= AudioConstants.SILENCE_THRESHOLD || it <= -AudioConstants.SILENCE_THRESHOLD }
+            shorts.indexOfFirst { it >= AudioConstants.SILENCE_THRESHOLD || it <= -AudioConstants.SILENCE_THRESHOLD }
 
 }

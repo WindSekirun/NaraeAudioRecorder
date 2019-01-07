@@ -59,5 +59,5 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
      * set [OnChunkAvailableListener] to get [AudioChunk]
      */
     fun setOnChunkAvailableListener(listener: OnChunkAvailableListener?) =
-        this.apply { this.chunkAvailableListener = listener }
+            this.apply { this.chunkAvailableListener = listener }
 }

@@ -1,11 +1,10 @@
 package com.github.windsekirun.naraeaudiorecorder.source
 
 import android.media.AudioRecord
-import android.media.MediaSyncEvent
 import android.media.audiofx.NoiseSuppressor
-import android.util.Log
 import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
 import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
+import com.github.windsekirun.naraeaudiorecorder.model.DebugState
 
 /**
  * Default setting + NoiseSuppressor for [AudioRecord]
@@ -15,7 +14,7 @@ class NoiseAudioSource(audioRecordConfig: AudioRecordConfig = AudioRecordConfig.
 
     override fun preProcessAudioRecord(): AudioRecord {
         if (!NoiseSuppressor.isAvailable()) {
-            Log.e(LogConstants.TAG, LogConstants.EXCEPTION_NOT_SUPPORTED_NOISE_SUPPRESSOR)
+            DebugState.error(LogConstants.EXCEPTION_NOT_SUPPORTED_NOISE_SUPPRESSOR)
             throw UnsupportedOperationException(LogConstants.EXCEPTION_NOT_SUPPORTED_NOISE_SUPPRESSOR)
         }
 
@@ -23,7 +22,7 @@ class NoiseAudioSource(audioRecordConfig: AudioRecordConfig = AudioRecordConfig.
         if (noiseSuppressor != null) {
             noiseSuppressor.enabled = true
         } else {
-            Log.e(LogConstants.TAG, LogConstants.EXCEPTION_INITIAL_FAILED_NOISE_SUPPESSOR)
+            DebugState.error(LogConstants.EXCEPTION_INITIAL_FAILED_NOISE_SUPPESSOR)
         }
 
         return super.preProcessAudioRecord()

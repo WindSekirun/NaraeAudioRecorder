@@ -9,7 +9,7 @@ import java.io.File
 /**
  * Default settings of [RecordFinder]
  */
-class DefaultRecordFinder  : RecordFinder {
+class DefaultRecordFinder : RecordFinder {
 
     /**
      * see [RecordFinder.find]

@@ -1,7 +1,6 @@
 package com.github.windsekirun.naraeaudiorecorder.source
 
 import android.media.AudioRecord
-import android.media.MediaSyncEvent
 import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
 
 /**
@@ -17,8 +16,8 @@ open class DefaultAudioSource(var audioRecordConfig: AudioRecordConfig = AudioRe
      */
     private val _bufferSize: Int by lazy {
         AudioRecord.getMinBufferSize(
-            audioRecordConfig.frequency,
-            audioRecordConfig.channel, audioRecordConfig.audioEncoding
+                audioRecordConfig.frequency,
+                audioRecordConfig.channel, audioRecordConfig.audioEncoding
         )
     }
 
@@ -27,11 +26,11 @@ open class DefaultAudioSource(var audioRecordConfig: AudioRecordConfig = AudioRe
      */
     private val _audioRecord: AudioRecord by lazy {
         AudioRecord(
-            audioRecordConfig.audioSource,
-            audioRecordConfig.frequency,
-            audioRecordConfig.channel,
-            audioRecordConfig.audioEncoding,
-            getBufferSize()
+                audioRecordConfig.audioSource,
+                audioRecordConfig.frequency,
+                audioRecordConfig.channel,
+                audioRecordConfig.audioEncoding,
+                getBufferSize()
         )
     }
 
@@ -55,7 +54,7 @@ open class DefaultAudioSource(var audioRecordConfig: AudioRecordConfig = AudioRe
     /**
      * see [AudioSource.isRecordAvailable]
      */
-    override fun isRecordAvailable(): Boolean  = _recordAvailable
+    override fun isRecordAvailable(): Boolean = _recordAvailable
 
     /**
      * see [AudioSource.setRecordAvailable]

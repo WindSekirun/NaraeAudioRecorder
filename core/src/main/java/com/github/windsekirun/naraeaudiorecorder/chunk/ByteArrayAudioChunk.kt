@@ -35,7 +35,7 @@ class ByteArrayAudioChunk(var bytes: ByteArray) : AudioChunk {
     /**
      * see [AudioChunk.getReadCount]
      */
-    override fun getReadCount(): Int  = _readCount
+    override fun getReadCount(): Int = _readCount
 
     /**
      * see [AudioChunk.setReadCount]

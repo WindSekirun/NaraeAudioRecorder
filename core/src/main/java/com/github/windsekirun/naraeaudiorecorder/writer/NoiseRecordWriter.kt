@@ -36,7 +36,7 @@ class NoiseRecordWriter(audioSource: AudioSource = DefaultAudioSource()) : Defau
                 firstSilenceMoment = 0
                 noiseRecordedAfterFirstSilenceThreshold++
             } else {
-                processSlientTime(audioChunk, outputStream)
+                processSilentTime(audioChunk, outputStream)
             }
         }
     }
@@ -45,9 +45,9 @@ class NoiseRecordWriter(audioSource: AudioSource = DefaultAudioSource()) : Defau
      * set [OnSilentDetectedListener] to get silent time
      */
     fun setOnSilentDetectedListener(listener: OnSilentDetectedListener?) =
-        this.apply { silentDetectedListener = listener }
+            this.apply { silentDetectedListener = listener }
 
-    private fun processSlientTime(audioChunk: AudioChunk, outputStream: OutputStream) {
+    private fun processSilentTime(audioChunk: AudioChunk, outputStream: OutputStream) {
         if (firstSilenceMoment == 0L) firstSilenceMoment = System.currentTimeMillis()
         val silentTime = System.currentTimeMillis() - firstSilenceMoment
         if (firstSilenceMoment != 0L && silentTime > AudioConstants.SILENCE_THRESHOLD) {

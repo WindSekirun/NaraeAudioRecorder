@@ -21,13 +21,13 @@ class WavHeader(private val audioSource: AudioSource, private val length: Long) 
         }.toByte()
 
         return wavFileHeader(length - 44, length - 44 + 36, frequency,
-            channels, bitsPerSample.toLong() * frequency * channels.toLong() / 8, bitsPerSample
+                channels, bitsPerSample.toLong() * frequency * channels.toLong() / 8, bitsPerSample
         )
     }
 
     private fun wavFileHeader(
-        totalAudioLen: Long, totalDataLen: Long, longSampleRate: Long,
-        channels: Int, byteRate: Long, bitsPerSample: Byte
+            totalAudioLen: Long, totalDataLen: Long, longSampleRate: Long,
+            channels: Int, byteRate: Long, bitsPerSample: Byte
     ): ByteArray {
         val header = ByteArray(44)
         header[0] = 'R'.toByte() // RIFF/WAVE header
