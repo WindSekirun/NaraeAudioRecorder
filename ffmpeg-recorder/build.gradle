@@ -26,10 +26,6 @@ android {
         exclude 'META-INF/library_release.kotlin_module'
     }
 
-    aaptOptions {
-        ignoreAssetsPattern "!*ffprobe"
-    }
-
     lintOptions {
         abortOnError false
     }
