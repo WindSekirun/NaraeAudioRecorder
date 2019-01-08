@@ -78,7 +78,7 @@ audioRecorder.create() {
 #### Initialization in Java
 This is full sample of 'initialization in Java'. other feature is same.
 
-```
+```java
 File destFile = new File(getContext().getExternalFilesDir(null) + String.format("/recorder/%s.mp3", fileName));
 destFile.getParentFile().mkdirs();
 
