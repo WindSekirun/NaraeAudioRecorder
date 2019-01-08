@@ -75,6 +75,32 @@ audioRecorder.create() {
 }
 ```
 
+#### Initialization in Java
+This is full sample of 'initialization in Java'. other feature is same.
+
+```
+File destFile = new File(getContext().getExternalFilesDir(null) + String.format("/recorder/%s.mp3", fileName));
+destFile.getParentFile().mkdirs();
+
+mAudioRecorder.checkPermission(getContext());
+mAudioRecorder.create(FFmpegRecordFinder.class, config -> {
+    config.setDestFile(destFile);
+    config.setDebugMode(true);
+    config.setTimerCountListener((currentTime, maxTime) -> { 
+    });
+            
+    return null;
+});
+
+FFmpegAudioRecorder ffmpegAudioRecorder = (FFmpegAudioRecorder) mAudioRecorder.getAudioRecorder();
+ffmpegAudioRecorder.setContext(getContext());
+ffmpegAudioRecorder.setOnConvertStateChangeListener(state -> {
+    if (state == FFmpegConvertState.SUCCESS) {
+        mRecordedPath = destFile.getPath();
+    }
+});
+```
+
 #### Permission 
 
 ```kotlin
