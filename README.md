@@ -43,6 +43,7 @@ FFmpeg-Recorder will contain five format, 'mp3', 'm4a', 'wma', 'flac', 'aac'
 This module will increase Final APK Size about 20MB. You can reduce APK Size by [this guide](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size)
 
 ```
+implementation 'nl.bravobit:android-ffmpeg:1.1.5'
 implementation 'com.github.WindSekirun.NaraeAudioRecorder:ffmpeg-recorder:1.0.0'
 ```
 
