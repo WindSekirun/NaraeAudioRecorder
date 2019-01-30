@@ -5,6 +5,7 @@ import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 import com.github.windsekirun.naraeaudiorecorder.listener.OnChunkAvailableListener
 import com.github.windsekirun.naraeaudiorecorder.listener.OnSilentDetectedListener
 import com.github.windsekirun.naraeaudiorecorder.listener.OnTimerCountListener
+import com.github.windsekirun.naraeaudiorecorder.model.DebugState
 import com.github.windsekirun.naraeaudiorecorder.source.AudioSource
 import com.github.windsekirun.naraeaudiorecorder.source.DefaultAudioSource
 import java.io.File
@@ -118,6 +119,12 @@ class AudioRecorderConfig {
                     timerCountCallback?.invoke(currentTime, maxTime)
                 }
             }
+        }
+
+        if (destFile?.exists() == false) {
+            DebugState.debug("The file does not appear to exist at the destination. " +
+                    "create parent directory. (file is generate automatically)")
+            destFile?.parentFile?.mkdirs()
         }
 
         return true
