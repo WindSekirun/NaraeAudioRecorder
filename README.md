@@ -33,7 +33,7 @@ repositories {
 Core module will contain most feature and two format. 'pcm' and 'wav'
 
 ```
-implementation 'com.github.WindSekirun.NaraeAudioRecorder:core:1.0.0'
+implementation 'com.github.WindSekirun.NaraeAudioRecorder:core:1.1.0'
 ```
 
 ### FFmpeg-Recorder
@@ -44,7 +44,7 @@ This module will increase Final APK Size about 20MB. You can reduce APK Size by 
 
 ```
 implementation 'nl.bravobit:android-ffmpeg:1.1.5'
-implementation 'com.github.WindSekirun.NaraeAudioRecorder:ffmpeg-recorder:1.0.0'
+implementation 'com.github.WindSekirun.NaraeAudioRecorder:ffmpeg-recorder:1.1.0'
 ```
 
 ## Usages
@@ -156,7 +156,7 @@ If you want use accuracy, define `refreshTimerMillis` in `create` section will b
 Using FFmpeg-recorder will need some additional info.
 
 ```kotlin
-audioRecorder.create() {
+audioRecorder.create(FFmpegRecordFinder::class.java) {
             this.destFile = this.destFile
             this.recordConfig = recordConfig
             this.audioSource = audioSource
