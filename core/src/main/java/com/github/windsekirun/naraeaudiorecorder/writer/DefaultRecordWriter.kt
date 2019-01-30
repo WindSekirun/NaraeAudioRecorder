@@ -18,6 +18,7 @@ import java.io.OutputStream
  */
 open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAudioSource()) : RecordWriter {
     protected var chunkAvailableListener: OnChunkAvailableListener? = null
+    private var confirmStart: Boolean = false
 
     /**
      * see [RecordWriter.startRecording]
@@ -31,8 +32,14 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
      * see [RecordWriter.stopRecording]
      */
     override fun stopRecording() {
+        if (!confirmStart) {
+            DebugState.error("stop() called on an uninitialized AudioRecord.")
+            return
+        }
+
         getAudioSource().getAudioRecord().stop()
         getAudioSource().getAudioRecord().release()
+        confirmStart = false
     }
 
     /**
@@ -47,6 +54,8 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
         val audioChunk = ByteArrayAudioChunk(ByteArray(bufferSize))
         DebugState.debug("read and write... available: ${audioSource.isRecordAvailable()}")
         while (audioSource.isRecordAvailable()) {
+            if (!confirmStart) confirmStart = true
+
             audioChunk.setReadCount(audioRecord.read(audioChunk.bytes, 0, bufferSize))
             if (!audioChunk.checkChunkAvailable()) continue
 
@@ -59,5 +68,5 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
      * set [OnChunkAvailableListener] to get [AudioChunk]
      */
     fun setOnChunkAvailableListener(listener: OnChunkAvailableListener?) =
-            this.apply { this.chunkAvailableListener = listener }
+        this.apply { this.chunkAvailableListener = listener }
 }
