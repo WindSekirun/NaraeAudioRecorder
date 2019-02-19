@@ -54,10 +54,10 @@ open class DefaultRecordWriter(private val audioSource: AudioSource = DefaultAud
         val audioChunk = ByteArrayAudioChunk(ByteArray(bufferSize))
         DebugState.debug("read and write... available: ${audioSource.isRecordAvailable()}")
         while (audioSource.isRecordAvailable()) {
-
+            if (!confirmStart) confirmStart = true
+            
             audioChunk.setReadCount(audioRecord.read(audioChunk.bytes, 0, bufferSize))
             if (!audioChunk.checkChunkAvailable()) continue
-            if (!confirmStart) confirmStart = true
 
             runOnUiThread { chunkAvailableListener?.onChunkAvailable(audioChunk) }
             outputStream.write(audioChunk.bytes)
