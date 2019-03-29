@@ -1,8 +1,10 @@
 # NaraeAudioRecorder
 
-[ ![Download](https://api.bintray.com/packages/windsekirun/maven/NaraeAudioRecorder-Core/images/download.svg) ](https://bintray.com/windsekirun/maven/NaraeAudioRecorder-Core/_latestVersion) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5704b97bf83346cbb909b336069954c2)](https://www.codacy.com/app/pyxis/NaraeAudioRecorder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WindSekirun/NaraeAudioRecorder&amp;utm_campaign=Badge_Grade) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-NaraeAudioRecorder-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7436)
+[ ![Download](https://api.bintray.com/packages/windsekirun/maven/NaraeAudioRecorder-Core/images/download.svg) ](https://bintray.com/windsekirun/maven/NaraeAudioRecorder-Core/_latestVersion) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-NaraeAudioRecorder-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7436)
 
 AudioRecorder for Android powered by Kotlin.
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="200">](https://play.google.com/store/apps/details?id=com.github.windsekirun.naraeaudiorecorder.sample)
 
 ## Key Features
 
@@ -188,7 +190,7 @@ ffmpegAudioRecorder.setOnConvertStateChangeListener(OnConvertStateChangeListener
 
 ### Sample Application
 
-You can view sample application by [APK](https://github.com/WindSekirun/NaraeAudioRecorder/blob/master/sample-debug.apk), [Code](https://github.com/WindSekirun/NaraeAudioRecorder/blob/master/sample/src/main/java/com/github/windsekirun/naraeaudiorecorder/sample/MainActivity.kt)
+[Code](https://github.com/WindSekirun/NaraeAudioRecorder/blob/master/sample/src/main/java/com/github/windsekirun/naraeaudiorecorder/sample/MainActivity.kt)
 
 ## License
 
