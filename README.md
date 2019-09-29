@@ -33,7 +33,7 @@ repositories {
 Core module will contain most feature and two format. 'pcm' and 'wav'
 
 ```
-implementation 'com.github.WindSekirun.NaraeAudioRecorder:core:1.1.0'
+implementation 'com.github.WindSekirun.NaraeAudioRecorder:core:1.2.0'
 ```
 
 ### FFmpeg-Recorder
