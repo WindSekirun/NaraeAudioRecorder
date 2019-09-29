@@ -48,8 +48,6 @@ class MainActivity : AppCompatActivity() {
             activity = this@MainActivity
         }
         setContentView(binding.root)
-
-        audioRecorder.checkPermission(this)
     }
 
     fun clickStart(view: View) {
@@ -67,7 +65,10 @@ class MainActivity : AppCompatActivity() {
 
         ffmpegMode = recorderCheckedPosition.get() >= 2
         val fileName = System.currentTimeMillis().asDateString()
-        destFile = File(Environment.getExternalStorageDirectory(), "/NaraeAudioRecorder/$fileName$extensions")
+        destFile = File(
+            Environment.getExternalStorageDirectory(),
+            "/NaraeAudioRecorder/$fileName$extensions"
+        )
         if (destFile == null) return
         destFile?.parentFile?.mkdir()
 
@@ -89,7 +90,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (ffmpegMode) {
-            val recorder: FFmpegAudioRecorder = audioRecorder.getAudioRecorder() as? FFmpegAudioRecorder ?: return
+            val recorder: FFmpegAudioRecorder =
+                audioRecorder.getAudioRecorder() as? FFmpegAudioRecorder ?: return
             recorder.setContext(this)
             recorder.setOnConvertStateChangeListener {
                 ffmpegConvertStateChanged(it)
@@ -97,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         audioRecorder.setOnRecordStateChangeListener { recordStateChanged(it) }
-        audioRecorder.startRecording()
+        audioRecorder.startRecording(this)
         recordInitialized = true
     }
 
@@ -158,7 +160,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun chunkAvailable(audioChunk: AudioChunk) {
-        Log.d(TAG, "chunkAvailable: maxAmp: ${audioChunk.getMaxAmplitude()}, readCount: ${audioChunk.getReadCount()}")
+        Log.d(
+            TAG,
+            "chunkAvailable: maxAmp: ${audioChunk.getMaxAmplitude()}, readCount: ${audioChunk.getReadCount()}"
+        )
     }
 
     private fun silentDetected(silentTime: Long) {
