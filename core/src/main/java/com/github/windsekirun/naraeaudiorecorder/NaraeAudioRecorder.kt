@@ -86,7 +86,6 @@ class NaraeAudioRecorder {
         if (!granted) {
             DebugState.debug(LogConstants.PERMISSION_DENIED)
             throw RuntimeException(LogConstants.PERMISSION_DENIED)
-            return
         }
 
         audioRecorder.startRecording()
