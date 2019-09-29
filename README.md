@@ -13,8 +13,6 @@ AudioRecorder for Android powered by Kotlin.
   * core: pcm, wav
   * ffmpeg-recorder: mp3, m4a, wma, flac, aac
 * Pause & Resume recording
-
-* Checking Runtime permission (RECORD_AUDIO, WRITE_EXTERNAL_STORAGE) for Android 6.0+
 * Integrated timer is provide `maxAvailableTime` feature
 * Remove background noise using [NoiseSuppressor](https://developer.android.com/reference/android/media/audiofx/NoiseSuppressor) API
 * 100% write in Kotlin, but has Java Compatible
@@ -103,22 +101,20 @@ ffmpegAudioRecorder.setOnConvertStateChangeListener(state -> {
 });
 ```
 
-#### Permission 
+#### Permission
 
-```kotlin
-audioRecorder.checkPermission(this)
-```
-
-If permission isn't granted, NaraeAudioRecorder will grant below permission for you.
+Starting from 1.2.0, if permission isn't granted, NaraeAudioRecorder will throw RuntimeException.
 
 * RECORD_AUDIO
 * WRITE_EXTERNAL_STORAGE
 * READ_EXTERNAL_STORAGE
 
+So make sure grant proper permissions **before using `startRecording` function.**
+
 #### Start / Stop / Pause / Resume
 
 ````kotlin
-audioRecorder.startRecording()
+audioRecorder.startRecording(Context)
 audioRecorder.stopRecording()
 audioRecorder.pauseRecording()
 audioRecorder.resumeRecording()

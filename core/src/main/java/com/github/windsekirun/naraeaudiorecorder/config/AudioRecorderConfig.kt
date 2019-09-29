@@ -129,4 +129,6 @@ class AudioRecorderConfig {
 
         return true
     }
+
+    fun checkAvailableTimer() = timerCountListener != null || maxAvailableMillis != -1L || refreshTimerMillis != 50L
 }
