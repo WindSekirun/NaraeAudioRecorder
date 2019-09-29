@@ -19,5 +19,6 @@ object LogConstants {
     const val EXCEPTION_FFMPEG_NOT_SUPPORTED = "This device doesn't support FFmpeg."
 
     const val PERMISSION_DENIED = "RECORD_AUDIO, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE will needed for recording audio."
+    const val TIMER_NOT_AVAILABLE = "Timer feature will ignored."
 
 }

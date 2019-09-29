@@ -209,6 +209,11 @@ class NaraeAudioRecorder {
     }
 
     private fun startTimer() {
+        if (!recorderConfig.checkAvailableTimer()) {
+            DebugState.debug(LogConstants.TIMER_NOT_AVAILABLE)
+            return
+        }
+
         timerDisposable =
             Observable.interval(recorderConfig.refreshTimerMillis, TimeUnit.MILLISECONDS)
                 .subscribe { data, _, _ ->
@@ -229,6 +234,11 @@ class NaraeAudioRecorder {
     }
 
     private fun stopTimer() {
+        if (!recorderConfig.checkAvailableTimer()) {
+            DebugState.debug(LogConstants.TIMER_NOT_AVAILABLE)
+            return
+        }
+
         timerDisposable.safeDispose()
     }
 
