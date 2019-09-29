@@ -1,8 +1,11 @@
 package com.github.windsekirun.naraeaudiorecorder
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.MediaMetadataRetriever
+import android.os.Build
 import com.github.windsekirun.naraeaudiorecorder.config.AudioRecorderConfig
 import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 import com.github.windsekirun.naraeaudiorecorder.extensions.safeDispose
@@ -22,7 +25,6 @@ import com.github.windsekirun.naraeaudiorecorder.writer.NoiseRecordWriter
 import com.github.windsekirun.naraeaudiorecorder.writer.RecordWriter
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import pyxis.uzuki.live.richutilskt.utils.RPermission
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -39,7 +41,6 @@ class NaraeAudioRecorder {
 
     private var currentTimer: Long = 0
     private var recordStateChangeListener: OnRecordStateChangeListener? = null
-    private var permissionGranted: Boolean = false
 
     /**
      * create and assign [NaraeAudioRecorder]
@@ -66,21 +67,6 @@ class NaraeAudioRecorder {
     }
 
     /**
-     * check permission when using [NaraeAudioRecorder]
-     */
-    fun checkPermission(context: Context) {
-        requestPermission(context) {
-            permissionGranted = it
-
-            if (permissionGranted) {
-                DebugState.debug(LogConstants.PERMISSION_GRANTED)
-            } else {
-                DebugState.debug(LogConstants.PERMISSION_DENIED)
-            }
-        }
-    }
-
-    /**
      * get [AudioRecorder] object
      */
     fun getAudioRecorder() = audioRecorder
@@ -88,10 +74,18 @@ class NaraeAudioRecorder {
     /**
      * Start Recording
      */
-    fun startRecording() {
-        if (!permissionGranted) {
+    fun startRecording(context: Context) {
+        val granted: Boolean = if (Build.VERSION.SDK_INT >= 23) {
+            checkPermissionGranted(context, Manifest.permission.RECORD_AUDIO) &&
+                    checkPermissionGranted(context, Manifest.permission.READ_EXTERNAL_STORAGE) &&
+                    checkPermissionGranted(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        } else {
+            true
+        }
+
+        if (!granted) {
             DebugState.debug(LogConstants.PERMISSION_DENIED)
-            return
+            throw RuntimeException(LogConstants.PERMISSION_DENIED)
         }
 
         audioRecorder.startRecording()
@@ -177,24 +171,22 @@ class NaraeAudioRecorder {
         return retrieveFileMetadata(file)
     }
 
-    private fun requestPermission(context: Context, action: (Boolean) -> Unit) {
-        val permission = listOf(Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        RPermission.instance.checkPermission(context, permission) { code, _ ->
-            action(code == RPermission.PERMISSION_GRANTED)
-        }
-    }
+    @TargetApi(Build.VERSION_CODES.M)
+    private fun checkPermissionGranted(context: Context, permission: String) =
+        context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
     private fun findAudioRecorder(recordFinder: Class<*>) {
         try {
             val finder = recordFinder.getConstructor().newInstance() as? RecordFinder
-                    ?: throw IllegalArgumentException(LogConstants.EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR)
+                ?: throw IllegalArgumentException(LogConstants.EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR)
 
             val file = recorderConfig.destFile ?: return // it can't be null
             audioRecorder = finder.find(file.extension, file, recordWriter)
         } catch (exception: Exception) {
-            throw IllegalArgumentException(LogConstants.EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR, exception)
+            throw IllegalArgumentException(
+                LogConstants.EXCEPTION_FINDER_NOT_HAVE_EMPTY_CONSTRUCTOR,
+                exception
+            )
         }
     }
 
@@ -217,13 +209,22 @@ class NaraeAudioRecorder {
     }
 
     private fun startTimer() {
-        timerDisposable = Observable.interval(recorderConfig.refreshTimerMillis, TimeUnit.MILLISECONDS)
+        if (!recorderConfig.checkAvailableTimer()) {
+            DebugState.debug(LogConstants.TIMER_NOT_AVAILABLE)
+            return
+        }
+
+        timerDisposable =
+            Observable.interval(recorderConfig.refreshTimerMillis, TimeUnit.MILLISECONDS)
                 .subscribe { data, _, _ ->
 
                     if (data == null) return@subscribe
                     if (recordWriter.getAudioSource().isRecordAvailable()) {
                         currentTimer += recorderConfig.refreshTimerMillis
-                        recorderConfig.timerCountListener?.onTime(currentTimer, recorderConfig.maxAvailableMillis)
+                        recorderConfig.timerCountListener?.onTime(
+                            currentTimer,
+                            recorderConfig.maxAvailableMillis
+                        )
 
                         if (recorderConfig.maxAvailableMillis != -1L && currentTimer >= recorderConfig.maxAvailableMillis) {
                             stopRecording()
@@ -233,6 +234,11 @@ class NaraeAudioRecorder {
     }
 
     private fun stopTimer() {
+        if (!recorderConfig.checkAvailableTimer()) {
+            DebugState.debug(LogConstants.TIMER_NOT_AVAILABLE)
+            return
+        }
+
         timerDisposable.safeDispose()
     }
 
@@ -248,7 +254,7 @@ class NaraeAudioRecorder {
         }
 
         val duration =
-                metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
+            metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
 
         metaRetriever.release()
 
