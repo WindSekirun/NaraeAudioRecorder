@@ -192,8 +192,8 @@ class NaraeAudioRecorder {
 
     private fun findRecordWriter() {
         val recordWriter = when (recorderConfig.audioSource) {
-            is DefaultAudioSource -> DefaultRecordWriter(recorderConfig.audioSource)
             is NoiseAudioSource -> NoiseRecordWriter(recorderConfig.audioSource)
+            is DefaultAudioSource -> DefaultRecordWriter(recorderConfig.audioSource)
             else -> null
         }
 
