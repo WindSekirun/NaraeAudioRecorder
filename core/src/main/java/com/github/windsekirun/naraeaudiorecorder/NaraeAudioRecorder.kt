@@ -76,9 +76,9 @@ class NaraeAudioRecorder {
      */
     fun startRecording(context: Context) {
         val granted: Boolean = if (Build.VERSION.SDK_INT >= 23) {
-            checkPermissionGranted(context, Manifest.permission.RECORD_AUDIO) &&
-                    checkPermissionGranted(context, Manifest.permission.READ_EXTERNAL_STORAGE) &&
-                    checkPermissionGranted(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            NEEDED_PERMISSIONS.all {
+                checkPermissionGranted(context, it)
+            }
         } else {
             true
         }
@@ -192,8 +192,8 @@ class NaraeAudioRecorder {
 
     private fun findRecordWriter() {
         val recordWriter = when (recorderConfig.audioSource) {
-            is DefaultAudioSource -> DefaultRecordWriter(recorderConfig.audioSource)
             is NoiseAudioSource -> NoiseRecordWriter(recorderConfig.audioSource)
+            is DefaultAudioSource -> DefaultRecordWriter(recorderConfig.audioSource)
             else -> null
         }
 
@@ -260,5 +260,13 @@ class NaraeAudioRecorder {
 
         recordMetadata = RecordMetadata(file, duration)
         return recordMetadata
+    }
+
+    companion object {
+        val NEEDED_PERMISSIONS = arrayOf(
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
     }
 }
