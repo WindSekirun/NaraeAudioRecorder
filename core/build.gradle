@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'org.jetbrains.dokka-android'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
@@ -37,20 +36,6 @@ dependencies {
     api "io.reactivex.rxjava2:rxjava:2.2.5"
 }
 
-
-dokka {
-    moduleName = 'core'
-    outputFormat = 'javadoc'
-    outputDirectory = "$projectDir/docs"
-    sourceDirs = files('src/main/java')
-    skipEmptyPackages = true
-    linkMapping {
-        dir = "src/main/java"
-        url = "https://github.com/WindSekirun/NaraeAudioRecorder/tree/master/core/src/main/java"
-        suffix = "#L"
-    }
-}
-
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'NaraeAudioRecorder-Core'
@@ -83,18 +68,7 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-}
-
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-    classifier = 'javadoc'
-    from "$buildDir/javadoc"
-}
-
 artifacts {
-    archives javadocJar
     archives sourcesJar
 }
 
