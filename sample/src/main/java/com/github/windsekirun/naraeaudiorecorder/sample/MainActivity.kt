@@ -1,6 +1,8 @@
 package com.github.windsekirun.naraeaudiorecorder.sample
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -10,12 +12,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.databinding.ObservableInt
 import com.github.windsekirun.naraeaudiorecorder.NaraeAudioRecorder
 import com.github.windsekirun.naraeaudiorecorder.chunk.AudioChunk
 import com.github.windsekirun.naraeaudiorecorder.config.AudioRecordConfig
+import com.github.windsekirun.naraeaudiorecorder.constants.LogConstants
 import com.github.windsekirun.naraeaudiorecorder.ffmpeg.FFmpegAudioRecorder
 import com.github.windsekirun.naraeaudiorecorder.ffmpeg.FFmpegRecordFinder
 import com.github.windsekirun.naraeaudiorecorder.ffmpeg.model.FFmpegConvertState
@@ -48,6 +52,33 @@ class MainActivity : AppCompatActivity() {
             activity = this@MainActivity
         }
         setContentView(binding.root)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                PERMISSIONS_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.any { it != PackageManager.PERMISSION_GRANTED }) {
+                Toast.makeText(
+                    this,
+                    LogConstants.PERMISSION_DENIED,
+                    Toast.LENGTH_LONG
+                ).show();
+            }
+        }
     }
 
     fun clickStart(view: View) {
@@ -193,5 +224,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "MainActivity"
+        const val PERMISSIONS_REQUEST_CODE = 1
     }
 }
